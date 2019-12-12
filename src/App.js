@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Header from './components/Header';
 import Formulario from './components/Formulario';
 
@@ -6,6 +6,19 @@ function App() {
 
   // definir la categoria y noticias
   const [categoria, guardarCategoria] = useState('');
+  const [noticias, guardarNoticias] = useState([]);
+
+  useEffect(() => {
+    const consultarAPI = async () => {
+      const url = `https://newsapi.org/v2/top-headlines?country=mx&category=${categoria}&apiKey=6c1c1dfcb4a943c7bf481bc628b80153`;
+
+      const respuesta = await fetch(url);
+      const noticias = await respuesta.json();
+
+      guardarNoticias(noticias.articles);
+    }
+    consultarAPI();
+  }, [categoria]);
 
   return (
     <Fragment>
